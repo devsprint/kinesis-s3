@@ -56,8 +56,8 @@ class GZipSerializerSpec extends Specification with ValidationMatchers {
       cleanup()
 
       val binaryInputs = List(
-        List("A", "B", 1000, "a", "b").mkString("\t").getBytes.success,
-        List("X", "Y", 2000, "x", "y").mkString("\t").getBytes.success
+        List("A", "B", 1000, "a", "b").mkString("\t").success,
+        List("X", "Y", 2000, "x", "y").mkString("\t").success
       )
 
       val serializationResult = GZipSerializer.serialize(binaryInputs, decompressedFilename)

@@ -15,16 +15,18 @@ package com.snowplowanalytics.snowplow.storage.kinesis.s3.serializers
 // Java libs
 import java.io.ByteArrayOutputStream
 
+import com.snowplowanalytics.snowplow.storage.kinesis.s3.EmitterStringInput
+
 // This project
 import com.snowplowanalytics.snowplow.storage.kinesis.s3.EmitterInput
 
 case class NamedStream(filename: String, stream: ByteArrayOutputStream)
 
-case class SerializationResult(namedStreams: List[NamedStream], results: List[EmitterInput])
+case class SerializationResult(namedStreams: List[NamedStream], results: List[EmitterStringInput])
 
 /**
  * Shared interface for all serializers
  */
 trait ISerializer {
-  def serialize(records: List[ EmitterInput ], baseFilename: String): SerializationResult
+  def serialize(records: List[ EmitterStringInput ], baseFilename: String): SerializationResult
 }

@@ -42,8 +42,13 @@ package object s3 {
    */
   type ValidatedRecord = Validation[FailedRecord, RawRecord]
 
+
+  type ValidatedStringRecord = Validation[FailedRecord, String]
+
   /**
    * Currently the same as ValidatedRecord, but could change in the future
    */
   type EmitterInput = Validation[FailedRecord, RawRecord]
+
+  type EmitterStringInput = Validation[FailedRecord, String]
 }

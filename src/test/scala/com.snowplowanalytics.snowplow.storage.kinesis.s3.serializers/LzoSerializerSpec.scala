@@ -80,7 +80,7 @@ class LzoSerializerSpec extends Specification with ValidationMatchers {
         new CollectorPayload("A", "B", 1000, "a", "b").success,
         new CollectorPayload("X", "Y", 2000, "x", "y").success)
 
-      val binaryInputs = inputEvents.map(e => e.map(x => serializer.serialize(x)))
+      val binaryInputs = inputEvents.map(e => e.map(x => new String(serializer.serialize(x))))
 
       val serializationResult = LzoSerializer.serialize(binaryInputs, decompressedFilename)
 

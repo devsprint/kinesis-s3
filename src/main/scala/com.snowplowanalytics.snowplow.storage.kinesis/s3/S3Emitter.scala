@@ -79,7 +79,7 @@ import serializers._
  *
  * Once the buffer is full, the emit function is called.
  */
-class S3Emitter(config: KinesisConnectorConfiguration, badSink: ISink, serializer: ISerializer, maxConnectionTime: Long, tracker: Option[Tracker]) extends IEmitter[ EmitterInput ] {
+class S3Emitter(config: KinesisConnectorConfiguration, badSink: ISink, serializer: ISerializer, maxConnectionTime: Long, tracker: Option[Tracker]) extends IEmitter[ EmitterStringInput ] {
 
   /**
    * The amount of time to wait in between unsuccessful index requests (in milliseconds).
@@ -116,7 +116,7 @@ class S3Emitter(config: KinesisConnectorConfiguration, badSink: ISink, serialize
    * @param buffer BasicMemoryBuffer containing EmitterInputs
    * @return list of inputs which failed transformation
    */
-  override def emit(buffer: UnmodifiableBuffer[ EmitterInput ]): java.util.List[ EmitterInput ] = {
+  override def emit(buffer: UnmodifiableBuffer[ EmitterStringInput ]): java.util.List[ EmitterStringInput ] = {
 
     log.info(s"Flushing buffer with ${buffer.getRecords.size} records.")
 
@@ -221,7 +221,7 @@ class S3Emitter(config: KinesisConnectorConfiguration, badSink: ISink, serialize
    *
    * @param records List of failed records to send to Kinesis
    */
-  override def fail(records: java.util.List[ EmitterInput ]) {
+  override def fail(records: java.util.List[ EmitterStringInput ]) {
     // TODO: Should there be a check for Successes?
     for (Failure(record) <- records.toList) {
       log.warn(s"Record failed: $record.line")

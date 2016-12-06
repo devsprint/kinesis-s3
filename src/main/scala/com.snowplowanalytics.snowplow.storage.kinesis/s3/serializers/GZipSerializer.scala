@@ -38,7 +38,7 @@ import java.util.zip.GZIPOutputStream
  * Object to handle ZIP compression of raw events
  */
 object GZipSerializer extends ISerializer {
-  def serialize(records: List[ EmitterInput ], baseFilename: String): SerializationResult = {
+  def serialize(records: List[ EmitterStringInput ], baseFilename: String): SerializationResult = {
     val log = LogFactory.getLog(getClass)
 
     val outputStream = new ByteArrayOutputStream()
@@ -53,13 +53,13 @@ object GZipSerializer extends ISerializer {
     } yield {
       try {
         gzipOutputStream.write(prefix)
-        gzipOutputStream.write(record)
+        gzipOutputStream.write(record.getBytes)
         prefix = "\n".getBytes
         record.success
       } catch {
         case e: IOException => {
           log.warn(e)
-          val base64Record = new String(Base64.encodeBase64(record), "UTF-8")
+          val base64Record = new String(Base64.encodeBase64(record.getBytes), "UTF-8")
           FailedRecord(List("Error writing raw event to output stream: [%s]".format(e.toString)), base64Record).fail
         }
 

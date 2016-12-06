@@ -13,15 +13,9 @@
 package com.snowplowanalytics.snowplow.storage.kinesis.s3
 
 // AWS Kinesis Connector libs
-import com.amazonaws.services.kinesis.connectors.interfaces.{
-  IEmitter,
-  IBuffer,
-  ITransformer,
-  IFilter,
-  IKinesisConnectorPipeline
-}
+import com.amazonaws.services.kinesis.connectors.interfaces.{IBuffer, IEmitter, IFilter, IKinesisConnectorPipeline, ITransformer}
 import com.amazonaws.services.kinesis.connectors.KinesisConnectorConfiguration
-import com.amazonaws.services.kinesis.connectors.impl.{BasicMemoryBuffer,AllPassFilter}
+import com.amazonaws.services.kinesis.connectors.impl.{AllPassFilter, BasicMemoryBuffer, StringToByteArrayTransformer}
 
 // Tracker
 import com.snowplowanalytics.snowplow.scalatracker.Tracker
@@ -33,15 +27,15 @@ import serializers._
 /**
  * S3Pipeline class sets up the Emitter/Buffer/Transformer/Filter
  */
-class S3Pipeline(badSink: ISink, serializer: ISerializer, maxConnectionTime: Long, tracker: Option[Tracker]) extends IKinesisConnectorPipeline[ ValidatedRecord, EmitterInput ] {
+class S3Pipeline(badSink: ISink, serializer: ISerializer, maxConnectionTime: Long, tracker: Option[Tracker]) extends IKinesisConnectorPipeline[ ValidatedStringRecord, EmitterStringInput ] {
 
   override def getEmitter(configuration: KinesisConnectorConfiguration) = new S3Emitter(configuration, badSink, serializer, maxConnectionTime, tracker)
 
-  override def getBuffer(configuration: KinesisConnectorConfiguration) = new BasicMemoryBuffer[ValidatedRecord](configuration)
+  override def getBuffer(configuration: KinesisConnectorConfiguration) = new BasicMemoryBuffer[ValidatedStringRecord](configuration)
 
-  override def getTransformer(c: KinesisConnectorConfiguration) = new RawEventTransformer()
+  override def getTransformer(c: KinesisConnectorConfiguration) = new StringEventTransformer
 
-  override def getFilter(c: KinesisConnectorConfiguration) = new AllPassFilter[ValidatedRecord]()
+  override def getFilter(c: KinesisConnectorConfiguration) = new AllPassFilter[ValidatedStringRecord]()
 
 }
 
